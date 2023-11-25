@@ -1,0 +1,39 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "docker-run": "sudo docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$npm_package_version"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "docker": "^1.0.0",
+    "dotenv": "^10.0.0",
+    "exact": "^0.8.0",
+    "express": "^4.17.2",
+    "fs": "^0.0.1-security",
+    "joi": "^17.5.0",
+    "joi-password-complexity": "^5.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^8.0.1",
+    "nodemailer": "6.8.0",
+    "openssl": "^2.0.0",
+    "sendotp": "^1.2.9",
+    "smtp-server": "^3.13.0",
+    "tls": "^0.0.1",
+    "twilio": "^4.19.0"
+  },
+  "devDependencies":{
+    "@babel/core": "^7.23.3",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.23.3",
+    "nodemon": "^2.0.15"
+  }
+}
