@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const SendOtp = require("sendotp");
 const express = require('express');
-const twilio =require('twilio');
+const twilio = require('twilio');
 require('events').EventEmitter.defaultMaxListeners = 15;
 
 const { User, validate } = require("../models/user");
@@ -12,14 +12,14 @@ const bcrypt = require("bcrypt");
 require("dotenv").config();
 
 //#region send sms
-const sendSMS =(req,res)=>{
-    const client = new twilio(process.env.TWILIO_SID,process.env.TWILIO_AUTH_TOKEN);
-    return client.messages.create({
-        from:process.env.FROM_PHONE,
-        body:req.body.message,
-        to:process.env.TO_PHONE
-    }).then(message=> res.status(200).json(message))
-        .catch(err=>res.status(400).json(err.message))
+const sendSMS = (req, res) => {
+   const client = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+   return client.messages.create({
+      from: process.env.FROM_PHONE,
+      body: req.body.message,
+      to: process.env.TO_PHONE
+   }).then(message => res.status(200).json(message))
+      .catch(err => res.status(400).json(err.message))
 }
 
 //#region sendOtp
@@ -81,65 +81,67 @@ const verifyOTP = async (req, res) => {
 }
 //#region phase 2
 //#region api User
-const apiUser= async (req, res) => {
-	try {
-		const data = validate(req.body);
+const apiUser = async (req, res) => {
+   try {
+      const data = validate(req.body);
 
-		if (data.error) {
+      if (data.error) {
 
-			return res.status(404).send({ message: data.error });
-		}
+         return res.status(404).send({ message: data.error });
+      }
 
-		let user = await User.findOne({ email: req.body.email });
-		if (user)
-			return res
-				.status(409)
-				.send({ message: "User with given email already Exist!" });
+      let user = await User.findOne({ email: req.body.email });
+      if (user)
+         return res
+            .status(409)
+            .send({ message: "User with given email already Exist!" });
 
-		const salt = await bcrypt.genSalt(Number(process.env.SALT));
-		const hashPassword = await bcrypt.hash(req.body.password, salt);
+      const salt = await bcrypt.genSalt(Number(process.env.SALT));
+      const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-		user = await new User({ ...req.body, password: hashPassword }).save();
+      user = await new User({ ...req.body, password: hashPassword }).save();
 
-		const token = await new Token({
-			userId: user._id,
-			token: crypto.randomBytes(32).toString("hex"),
-		}).save();
-		const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
-		await sendEmail(user.email, "Verify Email Leave Annual", url);
+      const token = await new Token({
+         userId: user._id,
+         token: crypto.randomBytes(32).toString("hex"),
+      }).save();
+      const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
+      await sendEmail(user.email, "Verify Email Leave Annual", url);
 
-		res
-			.status(201)
-			.send({ message: "An Email sent to your account please verify" });
-	} catch (error) {
-		console.log(error);
-		res.status(500).send({ message: "Internal Server Error" });
-	}
+      res
+         .status(201)
+         .send({ message: "An Email sent to your account please verify" });
+   } catch (error) {
+      console.log(error);
+      res.status(500).send({ message: "Internal Server Error" });
+   }
 };
 
 //#region verify User
-const verifyUser= async (req, res) => {
-	try {
-		const user = await User.findOne({ _id: req.params.id });
-		if (!user) return res.status(400).send({ message: "Invalid link" });
+const verifyUser = async (req, res) => {
+   try {
+      const user = await User.findOne({ _id: req.params.id });
+      console.log('user:' + user)
+      if (!user) return res.status(400).send({ message: "Invalid link" });
 
-		const token = await Token.findOne({
-			userId: user._id,
-			token: req.params.token,
-		});
-		if (!token) {
-			return res.status(400).send({ message: "Invalid link" });
-		} else {
-			await User.updateOne({ _id: user._id, verified: true });
-			await token.deleteOne();
+      const token = await Token.findOne({
+         userId: user._id,
+         token: req.params.token,
+      });
+      console.log('token:' + token)
+      if (!token) {
+         return res.status(400).send({ message: "Invalid link" });
+      } else {
+         await User.findByIdAndUpdate(user._id, { verified: true });
+         await token.deleteOne();
 
-			return res.status(200).send({ message: "Email verified successfully" });
-		}
+         return res.status(200).send({ message: "Email verified successfully" });
+      }
 
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error", err: error.message });
-	}
+   } catch (error) {
+      res.status(500).send({ message: "Internal Server Error", err: error.message });
+   }
 };
 
 
-module.exports = { sendOTP, verifyOTP,sendSMS,apiUser,verifyUser }
+module.exports = { sendOTP, verifyOTP, sendSMS, apiUser, verifyUser }
