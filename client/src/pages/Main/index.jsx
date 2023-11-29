@@ -1,4 +1,6 @@
 import styles from "./styles.module.css";
+import PageMain from "../../components/Pages/Main/index.tsx";
+import React from 'react';
 
 const Main = () => {
 	const handleLogout = () => {
@@ -14,6 +16,7 @@ const Main = () => {
 					Logout
 				</button>
 			</nav>
+			<PageMain/>
 		</div>
 	);
 };
