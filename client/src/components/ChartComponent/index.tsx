@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useEffect, useRef,} from 'react';
 
 let tvScriptLoadingPromise;
@@ -7,6 +8,7 @@ export default function TradingViewWidget() {
 
   useEffect(
     () => {
+      // @ts-ignore
       onLoadScriptRef.current = createWidget;
 
       if (!tvScriptLoadingPromise) {

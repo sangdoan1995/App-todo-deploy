@@ -1,4 +1,4 @@
-import TradingViewWidget from "../../ChartComponent/index.tsx";
+import TradingViewWidget from "../../ChartComponent/index";
 
 function PageMain() {
   return (
