@@ -2,7 +2,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import Main from "./pages/Main";
 import Signup from "./pages/Singup";
 import Login from "./pages/Login";
-import {path} from "./constant";
+import {path} from "./constants/constants";
 import EmailVerify from "./pages/EmailVerify";
 
 function App() {
