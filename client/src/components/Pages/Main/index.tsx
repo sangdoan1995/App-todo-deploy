@@ -1,7 +1,7 @@
 import TradingViewWidget from "../../ChartComponent/index";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import * as constanxx from "@/constants/constants";
+import * as constanxx from "constants/constants";
 
 function PageMain() {
   const [prices, setPrices] = useState()
