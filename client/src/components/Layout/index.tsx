@@ -6,7 +6,7 @@ function PageLayout(props: { children: React.ReactNode }) {
     localStorage.removeItem("token");
     window.location.reload();
   };
-  return <></>
+  return <>{props.children}</>
   // return (
   //   <div className={styles.main_container}>
   //     <nav className={styles.navbar}>
