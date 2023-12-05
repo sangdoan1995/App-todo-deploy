@@ -1,9 +1,9 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import Main from "./components/Main";
-import Signup from "./components/Singup";
-import Login from "./components/Login";
-import {path} from "./constant";
-import EmailVerify from "./components/EmailVerify";
+import Main from "./pages/Main";
+import Signup from "./pages/Singup";
+import Login from "./pages/Login";
+import {path} from "./constants/constants";
+import EmailVerify from "./pages/EmailVerify";
 
 function App() {
 	const user = localStorage.getItem("token");
